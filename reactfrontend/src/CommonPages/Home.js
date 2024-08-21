@@ -8,6 +8,7 @@ import NoStories from "../components/Pages/NoStories";
 
 const Home = () => {
   const search = useLocation().search;
+  const safeStories = Array.isArray(stories) ? stories : [];
   const searchKey = new URLSearchParams(search).get('search');
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -65,15 +66,15 @@ const Home = () => {
 };
 
 const StoryList = ({ stories }) => (
-  <div className="flex flex-col gap-6 justify-center relative">
-    {Array.isArray(stories) && stories.length > 0 ? (
-      stories.map(story => (
-        <CardStory key={uuidv4()} story={story} />
-      ))
-    ) : (
-      <NoStories />
-    )}
-  </div>
+    <div className="flex flex-col gap-6 justify-center relative">
+      {safeStories.length > 0 ? (
+        safeStories.map(story => (
+          <CardStory key={uuidv4()} story={story} />
+        ))
+      ) : (
+        <NoStories />
+      )}
+    </div>
 );
 
 export default Home;

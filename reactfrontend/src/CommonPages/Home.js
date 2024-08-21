@@ -12,7 +12,6 @@ const Home = () => {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  let isMounted = true; // Flag to check if the component is still mounted
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -26,22 +25,17 @@ const Home = () => {
           signal // Pass the signal to axios
         });
 
-        if (isMounted) { // Only update state if the component is still mounted
+        if (data?.data) { // Check if data is defined and has a data property
+          setStories(data.data);
           navigate({
             pathname: '/',
             search: `?search=${searchKey || ""}`
           });
-
-          setStories(data.data);
         }
       } catch (error) {
-        if (isMounted) {
-          console.error("Error fetching stories:", error);
-        }
+        console.error("Error fetching stories:", error);
       } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        setLoading(false);
       }
 
       return () => {
@@ -53,7 +47,7 @@ const Home = () => {
 
     // Set the flag to false on component unmount
     return () => {
-      isMounted = false;
+      controller.abort(); // Abort the fetch request if the component unmounts
     };
   }, [searchKey, navigate]);
 
@@ -72,7 +66,7 @@ const StoryList = ({ stories }) => (
   <div className="flex flex-col gap-6 justify-center relative">
     {stories.length > 0 ? (
       stories.map(story => (
-        <CardStory key={uuidv4()} story={story} />
+        <CardStory key={story.id || uuidv4()} story={story} /> // Use a stable key if possible
       ))
     ) : (
       <NoStories />

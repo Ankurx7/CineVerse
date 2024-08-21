@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Home from '../../CommonPages/Home';
 import axios from 'axios';
@@ -9,7 +9,7 @@ const PrivateRoute = () => {
     const [error, setError] = useState("");
     const navigate = useNavigate();
     const { setActiveUser, setConfig } = useContext(AuthContext);
-    let isMounted = true;
+    const isMounted = useRef(true);
 
     useEffect(() => {
         const controlAuth = async () => {
@@ -24,13 +24,13 @@ const PrivateRoute = () => {
             try {
                 const { data } = await axios.get("/auth/private", config);
 
-                if (isMounted) {
+                if (isMounted.current) {
                     setAuth(true);
                     setActiveUser(data.user);
                     setConfig(config);
                 }
             } catch (error) {
-                if (isMounted) {
+                if (isMounted.current) {
                     localStorage.removeItem("authToken");
                     setAuth(false);
                     setActiveUser({});
@@ -43,7 +43,7 @@ const PrivateRoute = () => {
         controlAuth();
 
         return () => {
-            isMounted = false;
+            isMounted.current = false;
         };
     }, [navigate, setActiveUser, setConfig]);
 

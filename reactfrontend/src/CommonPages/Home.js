@@ -8,32 +8,31 @@ import NoStories from "../components/Pages/NoStories";
 
 const Home = () => {
   const search = useLocation().search;
-  const safeStories = Array.isArray(stories) ? stories : [];
   const searchKey = new URLSearchParams(search).get('search');
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [isMounted, setIsMounted] = useState(true); // Use state to track mounting
 
   useEffect(() => {
-    const fetchStories = async () => {
-      const controller = new AbortController();
-      const { signal } = controller;
+    let isMounted = true; // Flag to check if the component is still mounted
+    const controller = new AbortController(); // Create an AbortController
+    const { signal } = controller; // Extract the signal
 
+    const fetchStories = async () => {
       setLoading(true);
       try {
         const { data } = await axios.get(`/story/getAllStories`, {
           params: { search: searchKey || "" },
-          signal
+          signal // Pass the signal to axios
         });
 
-        if (isMounted) {
+        if (isMounted) { // Only update state if the component is still mounted
           navigate({
             pathname: '/',
             search: `?search=${searchKey || ""}`
           });
 
-          setStories(Array.isArray(data.data) ? data.data : []);
+          setStories(data.data || []); // Ensure that stories is always an array
         }
       } catch (error) {
         if (isMounted) {
@@ -49,10 +48,10 @@ const Home = () => {
     fetchStories();
 
     return () => {
-      setIsMounted(false);
-      controller.abort();
+      isMounted = false; // Set the flag to false on component unmount
+      controller.abort(); // Cleanup the request on component unmount
     };
-  }, [searchKey, navigate, isMounted]);
+  }, [searchKey, navigate]);
 
   return (
     <div className="relative p-4 bg-gradient-to-r from-blue-200 to-teal-200 min-h-screen">
@@ -65,7 +64,10 @@ const Home = () => {
   );
 };
 
-const StoryList = ({ stories }) => (
+const StoryList = ({ stories }) => {
+  const safeStories = Array.isArray(stories) ? stories : []; // Ensure stories is always an array
+
+  return (
     <div className="flex flex-col gap-6 justify-center relative">
       {safeStories.length > 0 ? (
         safeStories.map(story => (
@@ -75,6 +77,7 @@ const StoryList = ({ stories }) => (
         <NoStories />
       )}
     </div>
-);
+  );
+};
 
 export default Home;

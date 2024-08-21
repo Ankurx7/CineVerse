@@ -12,44 +12,46 @@ const Home = () => {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [isMounted, setIsMounted] = useState(true); // Use state to track mounting
 
   useEffect(() => {
     const fetchStories = async () => {
-      const controller = new AbortController(); // Create an AbortController
-      const { signal } = controller; // Extract the signal
+      const controller = new AbortController();
+      const { signal } = controller;
 
       setLoading(true);
       try {
         const { data } = await axios.get(`/story/getAllStories`, {
           params: { search: searchKey || "" },
-          signal // Pass the signal to axios
+          signal
         });
 
-        if (data?.data) { // Check if data is defined and has a data property
-          setStories(data.data);
+        if (isMounted) {
           navigate({
             pathname: '/',
             search: `?search=${searchKey || ""}`
           });
+
+          setStories(Array.isArray(data.data) ? data.data : []);
         }
       } catch (error) {
-        console.error("Error fetching stories:", error);
+        if (isMounted) {
+          console.error("Error fetching stories:", error);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
-
-      return () => {
-        controller.abort(); // Cleanup the request on component unmount
-      };
     };
 
     fetchStories();
 
-    // Set the flag to false on component unmount
     return () => {
-      controller.abort(); // Abort the fetch request if the component unmounts
+      setIsMounted(false);
+      controller.abort();
     };
-  }, [searchKey, navigate]);
+  }, [searchKey, navigate, isMounted]);
 
   return (
     <div className="relative p-4 bg-gradient-to-r from-blue-200 to-teal-200 min-h-screen">
@@ -64,9 +66,9 @@ const Home = () => {
 
 const StoryList = ({ stories }) => (
   <div className="flex flex-col gap-6 justify-center relative">
-    {stories.length > 0 ? (
+    {Array.isArray(stories) && stories.length > 0 ? (
       stories.map(story => (
-        <CardStory key={story.id || uuidv4()} story={story} /> // Use a stable key if possible
+        <CardStory key={uuidv4()} story={story} />
       ))
     ) : (
       <NoStories />

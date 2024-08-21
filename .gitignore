@@ -1,0 +1,8 @@
+# Ignore node_modules directories
+reactfrontend/node_modules/
+reactfrontend/build/
+server/node_modules/
+
+# Ignore environment files
+.env
+

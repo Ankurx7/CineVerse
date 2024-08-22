@@ -33,7 +33,7 @@ const AddStory = () => {
     formdata.append("content", content);
 
     try {
-      const { data } = await axios.post("/story/addstory", formdata, config);
+      const { data } = await axios.post("${process.env.REACT_APP_API_BASE_URL}/story/addstory", formdata, config);
       setSuccess('Story added successfully!');
       clearInputs();
       setTimeout(() => {

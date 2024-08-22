@@ -5,13 +5,11 @@ const path = require("path");
 
 const IndexRoute = require("./routes/index");
 const connectDatabase = require("./Config/Database");
-const {cloudinaryConnect}  = require("./Config/cloudinary");
 // Load environment variables
 dotenv.config(); 
 
 // Connect to the database
 connectDatabase();
-cloudinaryConnect();
 const app = express();
 
 // Middleware

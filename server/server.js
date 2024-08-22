@@ -14,7 +14,24 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors({ methods: ["GET", "POST", "PUT", "DELETE"] }));
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    // Allow specific dynamic origins
+    if (origin.includes('vercel.app')) {
+      return callback(null, true);
+    }
+
+    // Block any other origins
+    return callback(new Error('Not allowed by CORS'));
+  },
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use("/", IndexRoute);
 
 // Serve static files

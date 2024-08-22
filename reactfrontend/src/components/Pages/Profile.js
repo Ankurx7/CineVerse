@@ -15,7 +15,7 @@ const Profile = () => {
         const getUserProfile = async () => {
             setLoading(true);
             try {
-                const { data } = await axios.get("/user/profile", config);
+                const { data } = await axios.get("${process.env.REACT_APP_API_BASE_URL}/user/profile", config);
                 setUser(data.data);
                 setLoading(false);
             } catch (error) {

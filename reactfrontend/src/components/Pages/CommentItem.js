@@ -14,7 +14,7 @@ const CommentItem = ({ comment, activeUser }) => {
         const getCommentLikeStatus = async () => {
             const comment_id = comment._id;
             try {
-                const { data } = await axios.post(`/comment/${comment_id}/getCommentLikeStatus`, { activeUser }, {
+                const { data } = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/comment/${comment_id}/getCommentLikeStatus`, { activeUser }, {
                     headers: {
                         "Content-Type": "application/json",
                         authorization: `Bearer ${localStorage.getItem("authToken")}`,

@@ -1,7 +1,7 @@
 {
     "name": "frontend",
     "version": "0.1.0",
-    "proxy": "https://cineverse-t56q.onrender.com/",
+    "proxy": "https://cineverse-t56q.onrender.com",
     "private": true,
     "dependencies": {
         "@ckeditor/ckeditor5-build-classic": "^43.0.0",

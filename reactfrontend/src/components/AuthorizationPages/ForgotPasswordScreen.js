@@ -13,7 +13,7 @@ const ForgotPasswordScreen = () => {
     e.preventDefault();
 
     try {
-      const { data } = await axios.post("/auth/forgotpassword", { email });
+      const { data } = await axios.post("${process.env.REACT_APP_API_BASE_URL}/auth/forgotpassword", { email });
       setSuccess(data.message);
     } catch (error) {
       setError(error.response.data.error);

@@ -21,7 +21,7 @@ const Home = () => {
     const fetchStories = async () => {
       setLoading(true);
       try {
-        const { data } = await axios.get(`/story/getAllStories`, {
+        const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/story/getAllStories`, {
           params: { search: searchKey || "" },
           signal // Pass the signal to axios
         });

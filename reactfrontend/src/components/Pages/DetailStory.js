@@ -30,7 +30,7 @@ const DetailStory = () => {
 
       try {
         // Fetch active user info if authenticated
-        const authResponse = await axios.get("/auth/private", {
+        const authResponse = await axios.get("${process.env.REACT_APP_API_BASE_URL}/auth/private", {
           headers: {
             "Content-Type": "application/json",
             authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -51,7 +51,7 @@ const DetailStory = () => {
       }
 
       try {
-        const { data } = await axios.post(`/story/${slug}`, { activeUser }, {
+        const { data } = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/story/${slug}`, { activeUser }, {
           signal: controller.signal,
         });
         if (isMounted) {
@@ -87,7 +87,7 @@ const DetailStory = () => {
     setLikeStatus(!likeStatus);
 
     try {
-      const { data } = await axios.post(`/story/${slug}/like`, { activeUser }, {
+      const { data } = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/story/${slug}/like`, { activeUser }, {
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -106,7 +106,7 @@ const DetailStory = () => {
   const handleDelete = async () => {
     if (window.confirm("Do you want to delete this post?")) {
       try {
-        await axios.delete(`/story/${slug}/delete`, {
+        await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/story/${slug}/delete`, {
           headers: {
             "Content-Type": "application/json",
             authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -127,7 +127,7 @@ const DetailStory = () => {
 
   const addStoryToReadList = async () => {
     try {
-      const { data } = await axios.post(`/user/${slug}/addStoryToReadList`, { activeUser }, {
+      const { data } = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/${slug}/addStoryToReadList`, { activeUser }, {
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${localStorage.getItem("authToken")}`,

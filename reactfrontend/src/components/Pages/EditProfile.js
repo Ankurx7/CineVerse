@@ -26,7 +26,7 @@ const EditProfile = () => {
         if (photo) formData.append('photo', photo);
 
         try {
-            await axios.post('/user/editProfile', formData, config);
+            await axios.post('${process.env.REACT_APP_API_BASE_URL}/user/editProfile', formData, config);
             setSuccess(true);
             setTimeout(() => navigate('/profile'), 1500);
         } catch (error) {

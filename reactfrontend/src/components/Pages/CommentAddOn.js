@@ -14,7 +14,7 @@ const CommentSidebar = ({ slug, sidebarShowStatus, setSidebarShowStatus, activeU
 
     const getStoryComments = async () => {
         try {
-            const { data } = await axios.get(`/comment/${slug}/getAllComment`);
+            const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/comment/${slug}/getAllComment`);
             setCommentList(data.data);
             setCount(data.count);
         } catch (error) {

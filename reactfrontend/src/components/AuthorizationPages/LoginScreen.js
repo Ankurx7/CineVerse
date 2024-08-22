@@ -13,14 +13,19 @@ const LoginScreen = () => {
     e.preventDefault();
 
     try {
-      const { data } = await axios.post("/auth/login", { email, password });
-      localStorage.setItem("authToken", data.token);
-
-      setTimeout(() => {
+      // Use the full URL if needed based on your setup
+      const { data } = await axios.post("https://cine-verse-b2b3dhvb0-ankur-akashs-projects.vercel.app/auth/login", { email, password });
+      
+      // Ensure that data.token exists
+      if (data.token) {
+        localStorage.setItem("authToken", data.token);
         navigate("/");
-      }, 1800);
+      } else {
+        throw new Error("No token received from server.");
+      }
     } catch (error) {
-      setError(error.response.data.error);
+      console.error(error); // Log error to check structure
+      setError(error.response?.data?.error || "An error occurred");
       setTimeout(() => {
         setError("");
       }, 4500);
@@ -30,7 +35,7 @@ const LoginScreen = () => {
   return (
     <div className="flex items-center justify-center h-screen w-screen bg-gray-50">
       <div className="flex lg:w-[80%] max-w-[1200px] bg-white rounded-lg shadow-lg">
-        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
+        <div className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center relative">
           <Link to="/" className="absolute top-4 left-4 flex items-center text-gray-600 text-xl">
             <IoMdHome className="mr-2" /> Home
           </Link>

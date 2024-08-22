@@ -14,11 +14,7 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors({
-    origin: '*',  // Allows requests from any origin
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Authorization'
-}));
+app.use(cors({ methods: ["GET", "POST", "PUT", "DELETE"] }));
 app.use("/", IndexRoute);
 
 // Serve static files

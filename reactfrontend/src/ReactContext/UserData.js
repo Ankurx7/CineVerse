@@ -15,7 +15,7 @@ const AuthContextProvider = ({ children }) => {
   // Fetch user data
   const fetchUser = useCallback(async () => {
     try {
-      const response = await axios.get("/auth/private", config);
+      const response = await axios.get("${process.env.REACT_APP_API_BASE_URL}/auth/private", config);
       setActiveUser(response.data.user);
     } catch (error) {
       console.error("Failed to fetch user:", error);

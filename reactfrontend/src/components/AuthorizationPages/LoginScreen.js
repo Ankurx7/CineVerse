@@ -14,7 +14,7 @@ const LoginScreen = () => {
 
     try {
       // Use the full URL if needed based on your setup
-      const { data } = await axios.post("https://cine-verse-b2b3dhvb0-ankur-akashs-projects.vercel.app/auth/login", { email, password });
+      const { data } = await axios.post("auth/login", { email, password });
       
       // Ensure that data.token exists
       if (data.token) {

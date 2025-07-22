@@ -25,6 +25,7 @@ const StorySchema = new mongoose.Schema({
         minlength: [10, "Content must be at least 10 characters long"]
     },
     image: {
+        required : true,
         type: String,
         default: "default.jpg"
     },
